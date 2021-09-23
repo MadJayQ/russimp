@@ -40,11 +40,13 @@ impl From<&aiMesh> for Mesh {
             normals: utils::get_vec(mesh.mNormals, mesh.mNumVertices),
             name: mesh.mName.into(),
             vertices: utils::get_vec(mesh.mVertices, mesh.mNumVertices),
-            texture_coords: mesh.mTextureCoords.iter().map(|head| {
-                unsafe { head.as_mut() }.map(|head| {
-                    utils::get_vec(head, mesh.mNumVertices)
+            texture_coords: mesh
+                .mTextureCoords
+                .iter()
+                .map(|head| {
+                    unsafe { head.as_mut() }.map(|head| utils::get_vec(head, mesh.mNumVertices))
                 })
-            }).collect(),
+                .collect(),
             tangents: utils::get_vec(mesh.mTangents, mesh.mNumVertices),
             bitangents: utils::get_vec(mesh.mBitangents, mesh.mNumVertices),
             uv_components: mesh.mNumUVComponents.to_vec(),

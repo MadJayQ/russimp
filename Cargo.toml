@@ -29,8 +29,8 @@ vcpkg = "0.2.15"
 
 [package.metadata.vcpkg]
 git = "https://github.com/microsoft/vcpkg"
-rev = "a241dd2859f92f09f801cda2255a94e7bf8336db"
+rev = "9ab3baf"
 
 [package.metadata.vcpkg.target]
-x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md", install = ["assimp"] }
-x86-pc-windows-msvc = { triplet = "x86-windows-static-md", install = ["assimp"] }
+x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md", install = ["assimp", "zlib"] }
+x86-pc-windows-msvc = { triplet = "x86-windows-static-md", install = ["assimp", "zlib"] }

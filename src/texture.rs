@@ -1,8 +1,10 @@
 use crate::{sys::*, *};
 use derivative::Derivative;
 use num_enum::TryFromPrimitive;
-use std::{collections::HashMap, ffi::CStr, mem::MaybeUninit, ptr::slice_from_raw_parts, ops::BitAnd};
 use num_traits::ToPrimitive;
+use std::{
+    collections::HashMap, ffi::CStr, mem::MaybeUninit, ops::BitAnd, ptr::slice_from_raw_parts,
+};
 
 const EMBEDDED_TEXNAME_PREFIX: &str = "*";
 
@@ -300,8 +302,7 @@ impl Texture {
         result
     }
 
-    fn get_texels_and_buffer_from_embedded_file(texture: &aiTexture,
-    ) -> DataContent {
+    fn get_texels_and_buffer_from_embedded_file(texture: &aiTexture) -> DataContent {
         if Self::is_embedded_file_compressed(texture) {
             DataContent::Bytes(Self::load_embedded_file(texture))
         } else {
@@ -340,29 +341,28 @@ fn debug_texture() {
 
     let scene = Scene::from_file(
         current_directory_buf.as_str(),
-        vec![
-            PostProcess::ValidateDataStructure
-        ],
+        vec![PostProcess::ValidateDataStructure],
     )
-        .unwrap();
+    .unwrap();
 
     dbg!(&scene.materials);
 }
 
 #[test]
 fn amount_of_textures() {
-    use crate::{scene::{PostProcess, Scene}, texture::TextureType::Diffuse};
+    use crate::{
+        scene::{PostProcess, Scene},
+        texture::TextureType::Diffuse,
+    };
 
     let current_directory_buf =
         utils::get_model("models/GLTF2/BoxTextured-GLTF-Embedded/BoxTextured.gltf");
 
     let scene = Scene::from_file(
         current_directory_buf.as_str(),
-        vec![
-            PostProcess::ValidateDataStructure
-        ],
+        vec![PostProcess::ValidateDataStructure],
     )
-        .unwrap();
+    .unwrap();
 
     let textures = scene.materials[0].textures.get(&Diffuse).unwrap();
     assert_eq!(2, textures.len());
@@ -371,7 +371,9 @@ fn amount_of_textures() {
     for i in 0..2 {
         if let Some(d) = &textures[i].data {
             match d {
-                DataContent::Texel(_) => { not_texels = false; }
+                DataContent::Texel(_) => {
+                    not_texels = false;
+                }
                 DataContent::Bytes(v) => {
                     assert!(v.len() > 0);
                 }
@@ -384,18 +386,21 @@ fn amount_of_textures() {
 
 #[test]
 fn map_modes_are_correct() {
-    use crate::{scene::{PostProcess, Scene}, texture::{TextureType::Diffuse, TextureMapMode::{Mirror, Clamp}}};
+    use crate::{
+        scene::{PostProcess, Scene},
+        texture::{
+            TextureMapMode::{Clamp, Mirror},
+            TextureType::Diffuse,
+        },
+    };
 
-    let current_directory_buf =
-        utils::get_model("models/GLTF2/BoxTextured-GLTF/BoxTextured.gltf");
+    let current_directory_buf = utils::get_model("models/GLTF2/BoxTextured-GLTF/BoxTextured.gltf");
 
     let scene = Scene::from_file(
         current_directory_buf.as_str(),
-        vec![
-            PostProcess::ValidateDataStructure
-        ],
+        vec![PostProcess::ValidateDataStructure],
     )
-        .unwrap();
+    .unwrap();
 
     let texture = &scene.materials[0].textures.get(&Diffuse).unwrap()[0];
 
